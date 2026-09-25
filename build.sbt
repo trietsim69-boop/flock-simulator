@@ -6,5 +6,6 @@ lazy val root = (project in file("."))
   .settings(
     name := "Flock Simulator"
   )
-libraryDependencies += "org.scalafx" % "scalafx_3" % "22.0.0-R33"
+libraryDependencies += "org.scalafx" % "scalafx_3" % "21.0.0-R32"
 Compile / mainClass := Some("Launcher")
+fork := true
