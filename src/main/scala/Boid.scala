@@ -73,6 +73,16 @@ class Boid(var position: Vector2D, var velocity: Vector2D):
         if (distance < 20) avoidVec += directionAway * (1.0 / distance)
     }
     avoidVec
+
+  private def avoidObstacles(obstacles: List[Obstacle]): Vector2D =
+    var steer = Vector2D(0, 0)
+    obstacles.foreach { obstacle =>
+      if (obstacle.isInside(position)) then
+        val directionAway = (position - Vector2D(obstacle.x, obstacle.y)).normalize
+        steer += directionAway * 0.5
+    }
+    steer
+
   def draw(gc: GraphicsContext): Unit =
     if (drawTrail && history.nonEmpty) then
       gc.stroke = Color.web("#558cf488")
