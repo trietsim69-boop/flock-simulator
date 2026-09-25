@@ -7,3 +7,4 @@ lazy val root = (project in file("."))
     name := "Flock Simulator"
   )
 libraryDependencies += "org.scalafx" % "scalafx_3" % "22.0.0-R33"
+Compile / mainClass := Some("Launcher")

@@ -52,6 +52,7 @@ object Main extends JFXApp3:
 
     controls.padding = Insets(10)
 
+
     val layout = new VBox()
     layout.children = Seq(canvas, controls)
 
