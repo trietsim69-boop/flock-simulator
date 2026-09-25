@@ -18,15 +18,29 @@ object Main extends JFXApp3:
   val flock = new Flock()
 
   override def start(): Unit =
+    val loadedBoids = loadBoidPositions("boids_positions.txt")
+    val (cohesionWeight, separationWeight, alignmentWeight, visualRange) = loadSimulationSettings("simulation_settings.txt")
+    if (loadedBoids.isEmpty) then
+      flock.populate(numBoids, screenWidth, screenHeight)
+    else
+      flock.boids.clear()
+      flock.boids ++= loadedBoids.take(numBoids)
+
+    flock.setWeights(cohesionWeight, separationWeight, alignmentWeight, visualRange)
+
     val canvas = new Canvas(screenWidth, screenHeight)
     val gc = canvas.graphicsContext2D
-    flock.populate(numBoids, screenWidth, screenHeight)
 
     val cohesionSlider = new Slider(0, 0.1, 0.005)
     val separationSlider = new Slider(0, 0.3, 0.1)
     val alignmentSlider = new Slider(0, 0.2, 0.05)
     val visualRangeSlider = new Slider(10, 200, 75)
     val traceCheck = new CheckBox("Trace Path")
+
+    cohesionSlider.value = cohesionWeight
+    separationSlider.value = separationWeight
+    alignmentSlider.value = alignmentWeight
+    visualRangeSlider.value = visualRange
 
     val controls = new HBox(10,
       new Label("Cohesion") { padding = Insets(5) }, cohesionSlider,
@@ -70,13 +84,6 @@ object Main extends JFXApp3:
       flock.boids.head.visualRange,
       "simulation_settings.txt"
     )
-
-    val loadedBoids = loadBoidPositions("boids_positions.txt")
-    flock.boids.clear()
-    flock.boids ++= loadedBoids
-
-    val (cohesionWeight, separationWeight, alignmentWeight, visualRange) = loadSimulationSettings("simulation_settings.txt")
-    flock.setWeights(cohesionWeight, separationWeight, alignmentWeight, visualRange)
 
   def saveBoidPositions(boids: List[Boid], filename: String): Unit =
     val writer = new PrintWriter(new File(filename))
