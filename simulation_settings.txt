@@ -1,0 +1,4 @@
+cohesionWeight = 0.01
+separationWeight = 0.1
+alignmentWeight = 0.05
+visualRange = 100.0
