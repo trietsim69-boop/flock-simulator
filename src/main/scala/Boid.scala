@@ -22,7 +22,8 @@ class Boid(var position: Vector2D, var velocity: Vector2D):
     val alignmentVec = rule3(neighbors) * alignmentWeight
     val edgeVec = avoidEdges(width, height)
     val collisionAvoidanceVec = avoidCollisions(flock)
-    val acceleration = cohesionVec + separationVec + alignmentVec + edgeVec + collisionAvoidanceVec
+    val obstacleAvoidanceVec = avoidObstacles(obstacles)
+    val acceleration = cohesionVec + separationVec + alignmentVec + edgeVec + collisionAvoidanceVec + obstacleAvoidanceVec
 
     velocity = (velocity + acceleration).limit(maxSpeed)
     if (velocity.magnitude < minSpeed) velocity = velocity.normalize * minSpeed
@@ -76,8 +77,10 @@ class Boid(var position: Vector2D, var velocity: Vector2D):
 
   private def avoidObstacles(obstacles: List[Obstacle]): Vector2D =
     var steer = Vector2D(0, 0)
+
     obstacles.foreach { obstacle =>
-      if (obstacle.isInside(position)) then
+      val distanceToObstacle = position.distanceTo(Vector2D(obstacle.x, obstacle.y))
+      if (distanceToObstacle < obstacle.radius + 20) then
         val directionAway = (position - Vector2D(obstacle.x, obstacle.y)).normalize
         steer += directionAway * 0.5
     }
