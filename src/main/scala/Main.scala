@@ -18,6 +18,7 @@ object Main extends JFXApp3:
   val flock = new Flock()
 
   override def start(): Unit =
+    val obstacles = loadObstacles("obstacles.txt")
     val loadedBoids = loadBoidPositions("boids_positions.txt")
     val (cohesionWeight, separationWeight, alignmentWeight, visualRange) = loadSimulationSettings("simulation_settings.txt")
     if (loadedBoids.isEmpty) then
@@ -72,8 +73,8 @@ object Main extends JFXApp3:
 
       flock.tracePath = traceCheck.selected.value
 
-      flock.update(screenWidth, screenHeight)
-      flock.draw(gc)
+      flock.update(screenWidth, screenHeight, obstacles)
+      flock.draw(gc, obstacles)
     }.start()
 
     saveBoidPositions(flock.boids.toList, "boids_positions.txt")
@@ -121,3 +122,10 @@ object Main extends JFXApp3:
       settings("alignmentWeight"),
       settings("visualRange")
     )
+
+  def loadObstacles(filename: String): List[Obstacle] =
+    val lines = Source.fromFile(filename).getLines().toList
+    lines.map(line => {
+      val parts = line.split(" ")
+      new Obstacle(parts(0).toDouble, parts(1).toDouble, parts(2).toDouble)
+    })

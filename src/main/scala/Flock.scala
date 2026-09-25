@@ -14,11 +14,13 @@ class Flock:
       boids += boid
 
 
-  def update(width: Double, height: Double): Unit =
+  def update(width: Double, height: Double, obstacles: List[Obstacle]): Unit =
     boids.foreach(_.drawTrail = tracePath)
-    boids.foreach(_.update(boids.toList, width, height))
+    boids.foreach(_.update(boids.toList, obstacles, width, height))
 
-  def draw(gc: GraphicsContext): Unit = boids.foreach(_.draw(gc))
+  def draw(gc: GraphicsContext, obstacles: List[Obstacle]): Unit =
+    boids.foreach(_.draw(gc))
+    obstacles.foreach(_.draw(gc))
 
   def setWeights(coh: Double, sep: Double, ali: Double, range: Double): Unit =
     for (boid <- boids) do

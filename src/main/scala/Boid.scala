@@ -14,7 +14,7 @@ class Boid(var position: Vector2D, var velocity: Vector2D):
   var drawTrail = false
   private val history = ArrayBuffer[Vector2D]()
 
-  def update(flock: List[Boid], width: Double, height: Double): Unit =
+  def update(flock: List[Boid], obstacles: List[Obstacle], width: Double, height: Double): Unit =
     val neighbors = flock.filter(b => b != this && position.distanceTo(b.position) < visualRange)
 
     val cohesionVec = rule1(neighbors) * cohesionWeight
